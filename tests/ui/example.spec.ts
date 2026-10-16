@@ -1,4 +1,4 @@
-import { test, expect } from '@fixtures';
+import { test, expect } from '@fixtures/ui.fixture';
 
 test('has title', async ({ loggedInPage }) => {
   await loggedInPage.goto('/inventory.html');
