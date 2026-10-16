@@ -8,11 +8,23 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "types": ["node", "@playwright/test"],
-    "noEmit": true
+    "types": [
+      "node",
+      "@playwright/test"
+    ],
+    "noEmit": true,
+    "paths": {
+      "@fixtures": [
+        "./fixtures/index.ts"
+      ],
+      "@fixtures/*": [
+        "./fixtures/*"
+      ]
+    }
   },
   "include": [
     "tests/**/*.ts",
-    "playwright.config.ts"
+    "playwright.config.ts",
+    "env.d.ts"
   ]
 }

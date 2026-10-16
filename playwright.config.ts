@@ -18,14 +18,21 @@ export default defineConfig({
 
   projects: [
     {
+      name: 'ui-setup',
+      testDir: './tests',
+      testMatch: /ui\.auth\.setup\.ts/,
+      use: { baseURL: process.env.UI_BASE_URL },
+    },
+    {
       name: 'ui',
-      testMatch: "ui/**/*",
+      dependencies: ['ui-setup'],
+      testMatch: "ui/**/*.spec.ts",
       use: { baseURL: process.env.UI_BASE_URL },
     },
 
     {
       name: 'api',
-      testMatch: "api/**/*",
+      testMatch: "api/**/*.spec.ts",
       use: { baseURL: process.env.API_BASE_URL },
     },
   ],
