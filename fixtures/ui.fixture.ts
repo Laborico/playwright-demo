@@ -24,3 +24,7 @@ export const test = base.extend<PageFixtures>({
 });
 
 export { expect } from '@playwright/test';
+
+export const Tags = {
+  "login": "@login"
+}
