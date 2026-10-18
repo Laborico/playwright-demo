@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page } from "@playwright/test";
 
 export class BasePage {
   constructor(protected readonly page: Page) {
@@ -6,10 +6,10 @@ export class BasePage {
   }
 
   async navigate(url: string): Promise<void> {
-    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
+    await this.page.goto(url, { waitUntil: "domcontentloaded" });
   }
 
   async waitForPageLoad(): Promise<void> {
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 }

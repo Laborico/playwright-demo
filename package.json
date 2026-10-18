@@ -18,7 +18,7 @@
   "homepage": "https://github.com/Laborico/playwright-demo#readme",
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "@types/node": "^26.6.4"
+    "@types/node": "^26.6.5"
   },
   "dependencies": {
     "dotenv": "^18.0.8"

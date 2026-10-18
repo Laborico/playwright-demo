@@ -1,11 +1,19 @@
-import { BasePage } from './BasePage';
-import { Locator } from '@playwright/test';
+import { BasePage } from "./BasePage";
+import { Locator } from "@playwright/test";
 
 export class LoginPage extends BasePage {
-  readonly UserEmail: Locator = this.page.getByRole('textbox', { name: 'Username' });
-  readonly UserPassword: Locator = this.page.getByRole('textbox', { name: 'Password' });
-  readonly LoginButton: Locator = this.page.getByRole('button', { name: 'Login' });
-  readonly LoginError: Locator = this.page.locator(".error-message-container", { hasText: "Epic sadface: Sorry, this user has been locked out." });
+  readonly UserEmail: Locator = this.page.getByRole("textbox", {
+    name: "Username",
+  });
+  readonly UserPassword: Locator = this.page.getByRole("textbox", {
+    name: "Password",
+  });
+  readonly LoginButton: Locator = this.page.getByRole("button", {
+    name: "Login",
+  });
+  readonly LoginError: Locator = this.page.locator(".error-message-container", {
+    hasText: "Epic sadface: Sorry, this user has been locked out.",
+  });
 
   async goToLoginPage() {
     await this.navigate("/");
