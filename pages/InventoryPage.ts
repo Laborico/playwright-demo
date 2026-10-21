@@ -1,5 +1,7 @@
 import { BasePage } from "./BasePage";
 import { Locator } from "@playwright/test";
+import { HeaderComponent } from "./components/HeaderComponent";
+import { ItemListComponent } from "./components/ItemListComponent";
 
 const SortOptions = {
   NameAscending: "az",
@@ -11,17 +13,11 @@ const SortOptions = {
 type SortOption = keyof typeof SortOptions;
 
 export class InventoryPage extends BasePage {
-  readonly InventoryItem: Locator = this.page.locator(
-    "[data-test='inventory-item']",
-  );
-  readonly CartIcon: Locator = this.page.locator(
-    "[data-test='shopping-cart-link']",
-  );
+  readonly header = new HeaderComponent(this.page);
+  readonly itemList = new ItemListComponent(this.page);
+
   readonly SortDropdown: Locator = this.page.locator(
     "[data-test='product-sort-container']",
-  );
-  readonly AllProductNames: Locator = this.page.locator(
-    "[data-test='inventory-item-name']",
   );
 
   async goToInventoryPage() {
@@ -29,15 +25,13 @@ export class InventoryPage extends BasePage {
   }
 
   async addToCartByName(productName: string) {
-    await this.InventoryItem.filter({ hasText: productName })
+    await this.itemList.itemByName(productName)
       .getByRole("button", { name: "Add to cart" })
       .click();
   }
 
   async removeFromCartByName(productName: string) {
-    await this.InventoryItem.filter({ hasText: productName })
-      .getByRole("button", { name: "Remove" })
-      .click();
+    await this.itemList.removeByName(productName);
   }
 
   async sortProductsBy(sortingOrder: SortOption) {
@@ -45,6 +39,6 @@ export class InventoryPage extends BasePage {
   }
 
   async getProductNames() {
-    return await this.AllProductNames.allTextContents();
+    return await this.itemList.getProductNames();
   }
 }

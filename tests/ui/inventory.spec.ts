@@ -12,12 +12,12 @@ test.describe("Inventory test cases", { tag: Tags.inventory }, () => {
 
     await inventoryPage.addToCartByName(itemList["backpack"]);
 
-    await expect(inventoryPage.CartIcon).toHaveText("1");
+    await expect(inventoryPage.header.cartLink).toHaveText("1");
 
     await inventoryPage.addToCartByName(itemList["bike_light"]);
     await inventoryPage.addToCartByName(itemList["t-shirt"]);
 
-    await expect(inventoryPage.CartIcon).toHaveText("3");
+    await expect(inventoryPage.header.cartLink).toHaveText("3");
   });
 
   test("User can remove items from cart", async ({ inventoryPage }) => {
@@ -27,13 +27,13 @@ test.describe("Inventory test cases", { tag: Tags.inventory }, () => {
     await inventoryPage.addToCartByName(itemList["bike_light"]);
     await inventoryPage.addToCartByName(itemList["t-shirt"]);
 
-    await expect(inventoryPage.CartIcon).toHaveText("3");
+    await expect(inventoryPage.header.cartLink).toHaveText("3");
 
     await inventoryPage.removeFromCartByName(itemList["backpack"]);
     await inventoryPage.removeFromCartByName(itemList["bike_light"]);
     await inventoryPage.removeFromCartByName(itemList["t-shirt"]);
 
-    await expect(inventoryPage.CartIcon).toHaveText("");
+    await expect(inventoryPage.header.cartLink).toHaveText("");
   });
 
   test(
