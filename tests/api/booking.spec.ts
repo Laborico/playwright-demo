@@ -1,5 +1,6 @@
 import { test, expect, Tags } from "@fixtures/api.fixture";
 import { BookingClient } from "@api/clients/BookingClient";
+import { buildBooking } from "@api/factories/booking.factory";
 
 // an id far above anything the shared server holds
 const UNKNOWN_BOOKING_ID = 999999999;
@@ -38,14 +39,7 @@ test.describe("Booking test cases", { tag: Tags.booking }, () => {
     });
 
     test("Deletes an existing booking", async ({ bookingClient }) => {
-      const createResponse = await bookingClient.create({
-        firstname: "Jim",
-        lastname: "Brown",
-        totalprice: 111,
-        depositpaid: true,
-        bookingdates: { checkin: "2026-01-01", checkout: "2026-01-05" },
-        additionalneeds: "Breakfast",
-      });
+      const createResponse = await bookingClient.create(buildBooking());
       const { bookingid } = await createResponse.json();
 
       const response = await bookingClient.delete(bookingid);
