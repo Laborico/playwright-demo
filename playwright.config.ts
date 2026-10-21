@@ -33,7 +33,13 @@ export default defineConfig({
     {
       name: "api",
       testMatch: "api/**/*.spec.ts",
-      use: { baseURL: process.env.API_BASE_URL },
+      use: {
+        baseURL: process.env.API_BASE_URL,
+        extraHTTPHeaders: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
     },
   ],
 });

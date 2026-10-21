@@ -12,7 +12,7 @@ export const test = base.extend<{}, WorkerFixtures>({
       // needs its own request context
       const context = await playwright.request.newContext({
         baseURL: workerInfo.project.use.baseURL,
-        extraHTTPHeaders: { Accept: "application/json" },
+        extraHTTPHeaders: workerInfo.project.use.extraHTTPHeaders,
       });
 
       const response = await context.post("/auth", {
@@ -41,4 +41,5 @@ export { expect } from "@playwright/test";
 
 export const Tags = {
   login: "@login",
+  booking: "@booking",
 };

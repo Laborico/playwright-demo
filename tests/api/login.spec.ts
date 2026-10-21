@@ -1,14 +1,8 @@
 import { test, expect, Tags } from "@fixtures/api.fixture";
 
-const headers = {
-  Accept: "application/json",
-  "Content-Type": "application/json",
-};
-
 test.describe("Login test cases", { tag: Tags.login }, () => {
   test("Auth returns a token", async ({ request }) => {
     const response = await request.post("/auth", {
-      headers,
       data: {
         username: process.env.API_USERNAME,
         password: process.env.API_PASSWORD,
@@ -23,7 +17,6 @@ test.describe("Login test cases", { tag: Tags.login }, () => {
 
   test("Auth with bad credentials returns a reason", async ({ request }) => {
     const response = await request.post("/auth", {
-      headers,
       data: {
         username: process.env.API_USERNAME,
         password: "wrong-password",
