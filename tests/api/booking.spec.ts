@@ -59,6 +59,35 @@ test.describe("Booking test cases", { tag: Tags.booking }, () => {
     });
   });
 
+  test.describe("Update booking", { tag: Tags.crud.update }, () => {
+    test("Booking can be updated", async ({ bookingClient, booking }) => {
+      const updatedBooking = buildBooking({
+        firstname: "James",
+        totalprice: 222,
+      });
+
+      const response = await bookingClient.update(booking.id, updatedBooking);
+
+      expect(response.status()).toBe(200);
+      expect(await response.json()).toEqual(updatedBooking);
+    });
+
+    test("Booking can be partially updated", async ({
+      bookingClient,
+      booking,
+    }) => {
+      const response = await bookingClient.partialUpdate(booking.id, {
+        firstname: "James",
+      });
+
+      expect(response.status()).toBe(200);
+      expect(await response.json()).toEqual({
+        ...booking.data,
+        firstname: "James",
+      });
+    });
+  });
+
   test.describe("Delete booking", { tag: Tags.crud.delete }, () => {
     test("Returns 403 without a token", async ({ request }) => {
       const unauthenticatedClient = new BookingClient(request);
@@ -68,16 +97,13 @@ test.describe("Booking test cases", { tag: Tags.booking }, () => {
       expect(response.status()).toBe(403);
     });
 
-    test("Deletes an existing booking", async ({ bookingClient }) => {
-      const createResponse = await bookingClient.create(buildBooking());
-      const { bookingid } = await createResponse.json();
-
-      const response = await bookingClient.delete(bookingid);
+    test("Deletes an existing booking", async ({ bookingClient, booking }) => {
+      const response = await bookingClient.delete(booking.id);
 
       // restful-booker returns 201 on delete
       expect(response.status()).toBe(201);
 
-      const getResponse = await bookingClient.get(bookingid);
+      const getResponse = await bookingClient.get(booking.id);
       expect(getResponse.status()).toBe(404);
     });
   });

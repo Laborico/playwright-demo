@@ -12,6 +12,11 @@ export type Booking = {
   additionalneeds?: string;
 };
 
+export type CreatedBooking = {
+  id: number;
+  data: Booking;
+};
+
 export type BookingFilters = Partial<{
   firstname: string;
   lastname: string;
