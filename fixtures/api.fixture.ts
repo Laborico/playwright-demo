@@ -53,4 +53,10 @@ export { expect } from "@playwright/test";
 export const Tags = {
   login: "@login",
   booking: "@booking",
+  crud: {
+    create: "@create",
+    read: "@read",
+    update: "@update",
+    delete: "@delete",
+  },
 };

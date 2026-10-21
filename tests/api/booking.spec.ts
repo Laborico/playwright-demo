@@ -1,7 +1,11 @@
 import { test, expect, Tags } from "@fixtures/api.fixture";
+import { BookingClient } from "@api/clients/BookingClient";
+
+// an id far above anything the shared server holds
+const UNKNOWN_BOOKING_ID = 999999999;
 
 test.describe("Booking test cases", { tag: Tags.booking }, () => {
-  test.describe("Get booking ids", () => {
+  test.describe("Get booking ids", { tag: Tags.crud.read }, () => {
     test("Returns a list of booking ids", async ({ bookingClient }) => {
       const response = await bookingClient.getIds();
 
@@ -10,6 +14,47 @@ test.describe("Booking test cases", { tag: Tags.booking }, () => {
       const body = await response.json();
       expect(Array.isArray(body)).toBe(true);
       expect(body[0]).toEqual({ bookingid: expect.any(Number) });
+    });
+
+    test("Returns an empty list when no booking matches the filter", async ({
+      bookingClient,
+    }) => {
+      const response = await bookingClient.getIds({
+        firstname: `no-match-${Date.now()}`,
+      });
+
+      expect(response.status()).toBe(200);
+      expect(await response.json()).toEqual([]);
+    });
+  });
+
+  test.describe("Delete booking", { tag: Tags.crud.delete }, () => {
+    test("Returns 403 without a token", async ({ request }) => {
+      const unauthenticatedClient = new BookingClient(request);
+
+      const response = await unauthenticatedClient.delete(UNKNOWN_BOOKING_ID);
+
+      expect(response.status()).toBe(403);
+    });
+
+    test("Deletes an existing booking", async ({ bookingClient }) => {
+      const createResponse = await bookingClient.create({
+        firstname: "Jim",
+        lastname: "Brown",
+        totalprice: 111,
+        depositpaid: true,
+        bookingdates: { checkin: "2026-01-01", checkout: "2026-01-05" },
+        additionalneeds: "Breakfast",
+      });
+      const { bookingid } = await createResponse.json();
+
+      const response = await bookingClient.delete(bookingid);
+
+      // restful-booker returns 201 on delete
+      expect(response.status()).toBe(201);
+
+      const getResponse = await bookingClient.get(bookingid);
+      expect(getResponse.status()).toBe(404);
     });
   });
 });
