@@ -11,7 +11,8 @@
     "types": ["node", "@playwright/test"],
     "noEmit": true,
     "paths": {
-      "@fixtures/*": ["./fixtures/*"]
+      "@fixtures/*": ["./fixtures/*"],
+      "@api/*": ["./api/*"]
     }
   },
   "include": [

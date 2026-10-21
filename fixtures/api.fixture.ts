@@ -1,10 +1,17 @@
 import { test as base } from "@playwright/test";
+import { AuthClient } from "@api/clients/AuthClient";
+import { BookingClient } from "@api/clients/BookingClient";
+
+type TestFixtures = {
+  authClient: AuthClient;
+  bookingClient: BookingClient;
+};
 
 type WorkerFixtures = {
   authToken: string;
 };
 
-export const test = base.extend<{}, WorkerFixtures>({
+export const test = base.extend<TestFixtures, WorkerFixtures>({
   authToken: [
     async ({ playwright }, use, workerInfo) => {
       // ---- setup ----
@@ -15,12 +22,10 @@ export const test = base.extend<{}, WorkerFixtures>({
         extraHTTPHeaders: workerInfo.project.use.extraHTTPHeaders,
       });
 
-      const response = await context.post("/auth", {
-        data: {
-          username: process.env.API_USERNAME,
-          password: process.env.API_PASSWORD,
-        },
-      });
+      const response = await new AuthClient(context).login(
+        process.env.API_USERNAME,
+        process.env.API_PASSWORD,
+      );
       const { token } = await response.json();
 
       if (!token) {
@@ -35,6 +40,12 @@ export const test = base.extend<{}, WorkerFixtures>({
     },
     { scope: "worker" },
   ],
+  authClient: async ({ request }, use) => {
+    await use(new AuthClient(request));
+  },
+  bookingClient: async ({ request, authToken }, use) => {
+    await use(new BookingClient(request, authToken));
+  },
 });
 
 export { expect } from "@playwright/test";
