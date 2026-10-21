@@ -29,6 +29,36 @@ test.describe("Booking test cases", { tag: Tags.booking }, () => {
     });
   });
 
+  test.describe("Create booking", { tag: Tags.crud.create }, () => {
+    test("Booking can be created", async ({
+      bookingClient,
+    }) => {
+      const booking = buildBooking();
+
+      const response = await bookingClient.create(booking);
+
+      expect(response.status()).toBe(200);
+
+      const body = await response.json();
+      expect(body.bookingid).toEqual(expect.any(Number));
+      expect(body.booking).toEqual(booking);
+    });
+
+    test("Created booking can be retrieved by id", async ({
+      bookingClient,
+    }) => {
+      const booking = buildBooking({ firstname: "James", totalprice: 250 });
+
+      const createResponse = await bookingClient.create(booking);
+      const { bookingid } = await createResponse.json();
+
+      const getResponse = await bookingClient.get(bookingid);
+
+      expect(getResponse.status()).toBe(200);
+      expect(await getResponse.json()).toEqual(booking);
+    });
+  });
+
   test.describe("Delete booking", { tag: Tags.crud.delete }, () => {
     test("Returns 403 without a token", async ({ request }) => {
       const unauthenticatedClient = new BookingClient(request);
