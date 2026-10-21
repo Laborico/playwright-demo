@@ -10,6 +10,10 @@ export class CartPage extends BasePage {
     await this.navigate("/cart.html");
   }
 
+  async checkout() {
+    await this.page.getByRole("button", { name: "Checkout" }).click();
+  }
+
   async openItemByName(productName: string) {
     await this.itemList.openByName(productName);
   }

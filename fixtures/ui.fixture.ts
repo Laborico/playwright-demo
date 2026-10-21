@@ -2,6 +2,7 @@ import { test as base, Page } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { InventoryPage } from "../pages/InventoryPage";
 import { CartPage } from "../pages/CartPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
 import path from "path";
 
 const AUTH_STATE_PATH = path.resolve(
@@ -14,6 +15,7 @@ type PageFixtures = {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
   cartPage: CartPage;
+  checkoutPage: CheckoutPage;
 };
 
 export const test = base.extend<PageFixtures>({
@@ -37,6 +39,9 @@ export const test = base.extend<PageFixtures>({
   cartPage: async ({ loggedInPage }, use) => {
     await use(new CartPage(loggedInPage));
   },
+  checkoutPage: async ({ loggedInPage }, use) => {
+    await use(new CheckoutPage(loggedInPage));
+  },
 });
 
 export { expect } from "@playwright/test";
@@ -45,6 +50,7 @@ export const Tags = {
   login: "@login",
   inventory: "@inventory",
   cart: "@cart",
+  checkout: "@checkout",
   functionality: {
     sorting: "@sorting"
   }
