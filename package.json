@@ -1,15 +1,19 @@
 {
   "name": "playwright-demo",
   "version": "1.0.0",
-  "description": "A simple playwright demo",
-  "main": "index.js",
-  "scripts": {},
+  "description": "UI and API test automation for Sauce Demo and Restful-booker, built with Playwright and TypeScript",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --project=ui",
+    "test:api": "playwright test --project=api",
+    "report": "playwright show-report"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Laborico/playwright-demo.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Laborico",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
@@ -18,9 +22,7 @@
   "homepage": "https://github.com/Laborico/playwright-demo#readme",
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "@types/node": "^26.6.5"
-  },
-  "dependencies": {
+    "@types/node": "^26.6.5",
     "dotenv": "^18.0.8"
   }
 }

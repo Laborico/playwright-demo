@@ -4,9 +4,14 @@ import { BookingClient } from "@api/clients/BookingClient";
 import { buildBooking } from "@api/factories/booking.factory";
 import { CreatedBooking } from "@api/types";
 
+type BookingCleanup = {
+  track: (bookingId: number) => void;
+};
+
 type TestFixtures = {
   authClient: AuthClient;
   bookingClient: BookingClient;
+  bookingCleanup: BookingCleanup;
   booking: CreatedBooking;
 };
 
@@ -49,7 +54,18 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
   bookingClient: async ({ request, authToken }, use) => {
     await use(new BookingClient(request, authToken));
   },
-  booking: async ({ bookingClient }, use) => {
+  bookingCleanup: async ({ bookingClient }, use) => {
+    const trackedIds: number[] = [];
+
+    // tests record every booking they create
+    await use({ track: (bookingId) => trackedIds.push(bookingId) });
+
+    // cleanup, a test may have deleted a booking already so the status is ignored
+    for (const bookingId of trackedIds) {
+      await bookingClient.delete(bookingId);
+    }
+  },
+  booking: async ({ bookingClient, bookingCleanup }, use) => {
     // ---- setup ----
     const data = buildBooking();
     const response = await bookingClient.create(data);
@@ -59,12 +75,10 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
     }
 
     const { bookingid } = await response.json();
+    bookingCleanup.track(bookingid);
 
     // hand the created booking to the test
     await use({ id: bookingid, data });
-
-    // cleanup, the test may have deleted it already so the status is ignored
-    await bookingClient.delete(bookingid);
   },
 });
 

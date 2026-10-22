@@ -1,4 +1,4 @@
-import { test } from "@fixtures/ui.fixture";
+import { test, expect, AUTH_STATE_PATH } from "@fixtures/ui.fixture";
 
 test("authenticate as valid user", async ({ loginPage, page }) => {
   const user: string = process.env.UI_STANDARD_USER;
@@ -8,7 +8,7 @@ test("authenticate as valid user", async ({ loginPage, page }) => {
 
   await loginPage.login(user, password);
 
-  await page.context().storageState({
-    path: "playwright/.auth/ui-user.json",
-  });
+  await expect(page).toHaveURL(/inventory\.html/);
+
+  await page.context().storageState({ path: AUTH_STATE_PATH });
 });

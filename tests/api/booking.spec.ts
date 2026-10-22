@@ -32,6 +32,7 @@ test.describe("Booking test cases", { tag: Tags.booking }, () => {
   test.describe("Create booking", { tag: Tags.crud.create }, () => {
     test("Booking can be created", async ({
       bookingClient,
+      bookingCleanup,
     }) => {
       const booking = buildBooking();
 
@@ -40,17 +41,20 @@ test.describe("Booking test cases", { tag: Tags.booking }, () => {
       expect(response.status()).toBe(200);
 
       const body = await response.json();
+      bookingCleanup.track(body.bookingid);
       expect(body.bookingid).toEqual(expect.any(Number));
       expect(body.booking).toEqual(booking);
     });
 
     test("Created booking can be retrieved by id", async ({
       bookingClient,
+      bookingCleanup,
     }) => {
       const booking = buildBooking({ firstname: "James", totalprice: 250 });
 
       const createResponse = await bookingClient.create(booking);
       const { bookingid } = await createResponse.json();
+      bookingCleanup.track(bookingid);
 
       const getResponse = await bookingClient.get(bookingid);
 

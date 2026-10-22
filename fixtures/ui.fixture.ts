@@ -5,7 +5,7 @@ import { CartPage } from "../pages/CartPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import path from "path";
 
-const AUTH_STATE_PATH = path.resolve(
+export const AUTH_STATE_PATH = path.resolve(
   __dirname,
   "../playwright/.auth/ui-user.json",
 );

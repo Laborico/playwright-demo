@@ -20,6 +20,8 @@ test.describe("Login test cases", { tag: Tags.login }, () => {
 
     await loginPage.login(user, password);
 
-    await expect(loginPage.LoginError).toBeVisible();
+    await expect(loginPage.LoginError).toHaveText(
+      "Epic sadface: Sorry, this user has been locked out.",
+    );
   });
 });

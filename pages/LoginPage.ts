@@ -11,9 +11,7 @@ export class LoginPage extends BasePage {
   readonly LoginButton: Locator = this.page.getByRole("button", {
     name: "Login",
   });
-  readonly LoginError: Locator = this.page.locator(".error-message-container", {
-    hasText: "Epic sadface: Sorry, this user has been locked out.",
-  });
+  readonly LoginError: Locator = this.page.locator("[data-test='error']");
 
   async goToLoginPage() {
     await this.navigate("/");

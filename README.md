@@ -143,10 +143,10 @@ These tests cover the purchase journey in the order a shopper experiences it: lo
 
 | Spec | Test | Validates |
 |---|---|---|
-| `login.spec.ts` | Login as valid user | A standard user lands on `/inventory.html` and is able to acces the app. |
+| `login.spec.ts` | Login as valid user | A standard user lands on `/inventory.html` and is able to access the app. |
 | `login.spec.ts` | Login as invalid user | A **locked-out** user sees the "this user has been locked out" error |
 | `inventory.spec.ts` | User can add items to cart | The user is able to add items to the cart (needed for checkout).
-| `inventory.spec.ts` | User can remove items from cart | The user is able to remove itesm from the cart. |
+| `inventory.spec.ts` | User can remove items from cart | The user is able to remove items from the cart. |
 | `inventory.spec.ts` | User can sort products: Name | User is able to sort products on the inventory/listing page |
 | `cart.spec.ts` | User can view, open and remove an item in the cart | Functionality within the cart page, as well as validating user is able to navigate to the product view page |
 | `checkout.spec.ts` | User can complete a checkout | User is able to do a complete flow, adds item, fills the info form and completes the checkout. |
@@ -227,7 +227,7 @@ playwright-demo/
 - `HeaderComponent` is used by the inventory, cart and checkout pages.
 - `ItemListComponent` is used by the same three pages.
 
-**Locators** Locators use `getByRole` wherever an element has an accessible role and name, for example form fields and buttons. That matches how users find elements and survives styling changes. `data-test` attributes are used for elements that have it, for example the cart badge and the payment and shipping values.
+**Locators.** Locators use `getByRole` wherever an element has an accessible role and name, for example form fields and buttons. That matches how users find elements and survives styling changes. `data-test` attributes are used for elements that have it, for example the cart badge and the payment and shipping values.
 
 **Log in once.** `tests/ui.auth.setup.ts` logs in through UI and saves the browser session to `playwright/.auth/ui-user.json`. The `loggedInPage` fixture opens a fresh browser context from that saved session, so tests start already logged in without repeating the login. Only `login.spec.ts` uses a clean `page`.
 
@@ -251,7 +251,8 @@ playwright-demo/
 | `authToken` | Worker | Calls `/auth` once per worker and shares the token with every test in it. It throws a clear error if login fails |
 | `authClient` | Test | An `AuthClient` |
 | `bookingClient` | Test | A `BookingClient` that already holds the token |
-| `booking` | Test | Creates a booking before the test and gives it `{ id, data }`. Deletes it after the test, even if the test failed |
+| `bookingCleanup` | Test | Collects the ids of bookings a test creates through `track(id)`, and deletes them all after the test, even if the test failed |
+| `booking` | Test | Creates a booking before the test, tracks it for cleanup and gives it `{ id, data }` |
 
 `authToken` is scoped to the worker because a token is cheap to reuse and doesn't need a file on disk. It uses its own request context, because Playwright's built-in `request` fixture only exists per test.
 
@@ -268,12 +269,11 @@ Some of the API assertions look unusual. They are correct for restful-booker:
 | Login with bad credentials | `200` with `{ "reason": "Bad credentials" }`, not `401` |
 | Successful `DELETE` | `201`, not `200` or `204` |
 | Update or delete without a valid token | `403` |
-| Delete of a booking that doesn't exist | `405`, so the `booking` fixture ignores the status of its cleanup delete |
+| Delete of a booking that doesn't exist | `405`, so the `bookingCleanup` fixture ignores the status of its cleanup deletes |
 | `POST /booking` without `Accept: application/json` | `418` |
 
 --- 
 
 **Notes**
 
-- The Github Actions will not run as the directory is missing a `.` on the begining of the name (`github/` -> `.github/`), this was done on purpose to avoid running the CI worker needlessly
-- This is just a quick demo, there are a lot of test cases missing (validating user cannot checkout on empty car, validating the item view page, validating the .pdf receipt, validating filtering on the booking endpoint, validating creating booking with XML files, etc.)
+- This is just a quick demo, there are a lot of test cases missing (validating user cannot checkout on empty cart, validating the item view page, validating the .pdf receipt, validating filtering on the booking endpoint, validating creating booking with XML files, etc.)
